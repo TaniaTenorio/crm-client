@@ -16,8 +16,12 @@ const Layout = ({ children }) => {
         />
       </Head>
 
-			<Sidebar />
-      {children}
+			<div>
+				<div className="flex min-h-screen">
+					<Sidebar />
+					{children}
+				</div>
+			</div>
     </>
   );
 };
