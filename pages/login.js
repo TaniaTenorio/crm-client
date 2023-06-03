@@ -1,7 +1,62 @@
 import Reac from "react"
 import Layout from "@/components/Layout"
+import { useFormik } from "formik"
+import * as Yup from 'yup'
+import { useMutation, gql } from "@apollo/client"
+
+const AUTH_USER = gql`
+  mutation authUser($input: AuthInput!) {
+    authUser(input: $input) {
+      token
+    }
+  }
+`;
 
 const Login = () => {
+
+const emailErrMssg = "Invalid Email"
+const fieldErrMssg = "This field is mandatory"
+
+const [authUser] = useMutation(AUTH_USER)
+
+const formik = useFormik({
+  initialValues : {
+    email: "",
+    password: ""
+  },
+  validationSchema: Yup.object({
+    email: Yup.string().email(emailErrMssg).required(fieldErrMssg),
+    password: Yup.string().required(fieldErrMssg)
+  }),
+  onSubmit: async (values) => {
+    console.log('LOGGING');
+    const { email, password } = values
+    try {
+      const { data } = await authUser({
+        variables: {
+          input: {
+            email,
+            password
+          }
+        }
+      })
+      console.log('DATA', data)
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+})
+
+const renderError = (value) => {
+  return formik.touched[value] && formik.errors[value] ? (
+    <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+      <p className="font-bold">Error</p>
+      <p>{formik.errors[value]}</p>
+    </div>
+  ) : null;
+};
+
   return (
     <>
       <Layout>
@@ -9,7 +64,7 @@ const Login = () => {
 
         <div className="flex justify-center mt-5">
           <div className="w-full max-w-sm">
-            <form className="bg-white rounded shadow-md px-8 pt-6 pb-8 mb-4">
+            <form className="bg-white rounded shadow-md px-8 pt-6 pb-8 mb-4" onSubmit={formik.handleSubmit}>
               <div className="mb-4">
                 <label
                   className="block text-gray-700 text-sm font-bold mb-2"
@@ -22,8 +77,12 @@ const Login = () => {
                   id="email"
                   type="email"
                   placeholder="User Email"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.email}
                 />
               </div>
+              {renderError("email")}
 
               <div className="mb-4">
                 <label
@@ -37,10 +96,15 @@ const Login = () => {
                   id="password"
                   type="password"
                   placeholder="User Password"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.password}
                 />
               </div>
+              {renderError("password")}
 
-              <input className="bg-gray-800 w-full mt-5 p-2 text-white uppercase hover:bg-gray-900"
+              <input
+                className="bg-gray-800 w-full mt-5 p-2 text-white uppercase hover:bg-gray-900"
                 type="submit"
                 value="Log in"
               />
