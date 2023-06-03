@@ -71,7 +71,7 @@ const NewAccount = () => {
 
       } catch (error) {
         console.error(error)
-        const errorMssg = error.message.replace('GraphQL error', '')
+        const errorMssg = error.message.replace('GraphQL error:', '')
         setMessage(errorMssg);
 
         setTimeout(() => {
@@ -84,7 +84,7 @@ const NewAccount = () => {
 
   const renderMessage = () => {
     return (
-      <div className="bg-white py-2 px-3 my-3 mx-w-sm text-center mx-auto">
+      <div className="bg-white py-2 px-3 my-3 max-w-sm text-center mx-auto">
         <p className="text-gray-700">{message}</p>
       </div>
     )

@@ -1,8 +1,9 @@
-import Reac from "react"
+import * as React from "react"
 import Layout from "@/components/Layout"
 import { useFormik } from "formik"
 import * as Yup from 'yup'
 import { useMutation, gql } from "@apollo/client"
+import { useRouter } from "next/router"
 
 const AUTH_USER = gql`
   mutation authUser($input: AuthInput!) {
@@ -14,10 +15,13 @@ const AUTH_USER = gql`
 
 const Login = () => {
 
+const [message, setMessage] = React.useState(null)
+
 const emailErrMssg = "Invalid Email"
 const fieldErrMssg = "This field is mandatory"
 
 const [authUser] = useMutation(AUTH_USER)
+const router = useRouter()
 
 const formik = useFormik({
   initialValues : {
@@ -41,12 +45,38 @@ const formik = useFormik({
         }
       })
       console.log('DATA', data)
+      setMessage('Loading ...')
+
+      // Save toke in local storage
+      const { token } = data.authUser
+      console.log('TOKEN', token);
+      localStorage.setItem('token', token)
+
+      //Redirect to clients screen
+      setTimeout(() => {
+        setMessage(null)
+        router.push('/')
+      }, 2000)
     } catch (error) {
+      const errMssg = error.message.replace('GraphQL error:', '')
+      setMessage(errMssg)
       console.log(error);
+
+      setTimeout(() => {
+        setMessage(null)
+      }, 3000)
       
     }
   }
 })
+
+const renderMessage = () => {
+  return (
+    <div className="bg-white py-2 px-3 my-3 max-w-sm text-center mx-auto w-full flex justify-center">
+      <p className="text-gray-700">{message}</p>
+    </div>
+  );
+};
 
 const renderError = (value) => {
   return formik.touched[value] && formik.errors[value] ? (
@@ -61,6 +91,8 @@ const renderError = (value) => {
     <>
       <Layout>
         <h1 className="text-center text-2xl font-light">Login</h1>
+
+        {message && renderMessage()}
 
         <div className="flex justify-center mt-5">
           <div className="w-full max-w-sm">
