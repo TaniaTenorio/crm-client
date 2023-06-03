@@ -1,12 +1,35 @@
-import React from "react"
+import React, { useState } from "react"
 import Layout from "@/components/Layout"
 import { useFormik } from "formik"
 import * as Yup from 'yup'
+import { useMutation, gql } from "@apollo/client"
+import { useRouter } from "next/router"
+
+const CREATE_USER = gql`
+  mutation newUser($input: UserInput!) {
+    newUser(input: $input) {
+      created_at
+      email
+      id
+      last_name
+      name
+    }
+  }
+`;
+
 
 const NewAccount = () => {
   const fieldErrorMsg = "This field is mandatory"
   const emailErrMsd = 'Invalid Email'
   const passwordErrMsg = 'Password must have at least 6 characters'
+
+  const router = useRouter()
+
+  const [ message, setMessage] = useState(null)
+
+  // Create user
+
+  const [newUser] = useMutation(CREATE_USER)
 
   // Form validation
   const formik = useFormik({
@@ -22,10 +45,50 @@ const NewAccount = () => {
       email: Yup.string().email(emailErrMsd).required(fieldErrorMsg),
       password: Yup.string().required(fieldErrorMsg).min(6, passwordErrMsg)
     }),
-    onSubmit: (values) => {
-      console.log("enviando", values);
+    onSubmit: async (values) => {
+      const {name, lastName, email, password} = values
+      try {
+        const { data } = await newUser({
+          variables: {
+            input: {
+              name,
+              last_name: lastName,
+              email,
+              password 
+            }
+          }
+        })
+        // Usuario generado correctamente
+        setMessage(`User ${data.newUser.name} was created successfully`)
+
+        setTimeout(() => {
+          setMessage(null)
+          router.push("/login")
+        }, 3000);
+      
+
+        // Redirigir al home page
+
+      } catch (error) {
+        console.error(error)
+        const errorMssg = error.message.replace('GraphQL error', '')
+        setMessage(errorMssg);
+
+        setTimeout(() => {
+          setMessage(null)
+        }, 3000)
+
+      }
     },
   });
+
+  const renderMessage = () => {
+    return (
+      <div className="bg-white py-2 px-3 my-3 mx-w-sm text-center mx-auto">
+        <p className="text-gray-700">{message}</p>
+      </div>
+    )
+  }
 
   const renderError = (value) => {
     return(
@@ -41,6 +104,7 @@ const NewAccount = () => {
   return (
     <>
       <Layout>
+      {message && renderMessage()}
         <div className="flex justify-center mt-5">
           <div className="w-full max-w-sm">
             <form
