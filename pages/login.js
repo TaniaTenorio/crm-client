@@ -2,16 +2,9 @@ import * as React from "react"
 import Layout from "@/components/Layout"
 import { useFormik } from "formik"
 import * as Yup from 'yup'
-import { useMutation, gql } from "@apollo/client"
+import { useMutation } from "@apollo/client"
 import { useRouter } from "next/router"
-
-const AUTH_USER = gql`
-  mutation authUser($input: AuthInput!) {
-    authUser(input: $input) {
-      token
-    }
-  }
-`;
+import { AUTH_USER } from "@/helpers/queries"
 
 const Login = () => {
 

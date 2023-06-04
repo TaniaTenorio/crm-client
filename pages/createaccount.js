@@ -2,21 +2,9 @@ import React, { useState } from "react"
 import Layout from "@/components/Layout"
 import { useFormik } from "formik"
 import * as Yup from 'yup'
-import { useMutation, gql } from "@apollo/client"
+import { useMutation } from "@apollo/client"
 import { useRouter } from "next/router"
-
-const CREATE_USER = gql`
-  mutation newUser($input: UserInput!) {
-    newUser(input: $input) {
-      created_at
-      email
-      id
-      last_name
-      name
-    }
-  }
-`;
-
+import { CREATE_USER } from "@/helpers/queries"
 
 const NewAccount = () => {
   const fieldErrorMsg = "This field is mandatory"
