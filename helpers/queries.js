@@ -21,7 +21,7 @@ export const CREATE_USER = gql`
 `
 
 export const GET_CLIENTS_USER = gql`
-  query GetClientsSeller {
+  query getClientsSeller {
     getClientsSeller {
       company
       email
@@ -30,6 +30,18 @@ export const GET_CLIENTS_USER = gql`
       name
       phone
       seller
+    }
+  }
+`
+
+export const GET_USER = gql`
+  query getUser {
+    getUser {
+      created_at
+      email
+      id
+      last_name
+      name
     }
   }
 `;

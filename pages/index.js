@@ -1,12 +1,23 @@
+import * as React from 'react'
 import Layout from "@/components/Layout"
 import { useQuery } from "@apollo/client"
 import { GET_CLIENTS_USER } from "@/helpers/queries"
+import { useRouter } from "next/router"
 
 export default function Home() {
-  const { data, loading, error } = useQuery(GET_CLIENTS_USER)
+  const router = useRouter();
+  const { data, loading, client } = useQuery(GET_CLIENTS_USER)
 
-  if(loading) {
-    'Loading ...'
+  React.useEffect(() => {
+    if (!loading && !data?.getClientsSeller) {
+      client.clearStore();
+      router.push("/login")
+    }
+  }, [client, data?.getClientsSeller, router, loading])
+  
+
+  if(loading && !data?.getClientsSeller) {
+    return null
   }
 
   return (
@@ -24,7 +35,7 @@ export default function Home() {
           </thead>
 
           <tbody className="bg-white">
-            {data.getClientsSeller.map((client) => (
+            {data?.getClientsSeller?.map((client) => (
               <tr key={client.id}>
                 <td className="border px-4 py-2 text-gray-700">{client.name} {client.last_name}</td>
                 <td className="border px-4 py-2 text-gray-700">{client.company}</td>
