@@ -78,7 +78,7 @@ const renderError = (value) => {
       <p>{formik.errors[value]}</p>
     </div>
   ) : null;
-};
+}
 
   return (
     <>

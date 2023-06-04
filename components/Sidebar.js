@@ -9,7 +9,7 @@ const Sidebar = () => {
 
   const { data, loading, client } = useQuery(GET_USER)
 
-  if(loading && data === undefined) {
+  if(loading && !data?.getUser) {
     return null
   }
 
