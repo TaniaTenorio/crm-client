@@ -46,3 +46,17 @@ export const GET_USER = gql`
   }
 `;
 
+export const NEW_CLIENT = gql`
+  mutation newClient($input: ClientInput) {
+    newClient(input: $input) {
+      company
+      email
+      id
+      last_name
+      name
+      phone
+      seller
+    }
+  }
+`;
+

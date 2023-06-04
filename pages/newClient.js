@@ -2,10 +2,29 @@ import * as React from 'react'
 import Layout from '@/components/Layout'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
+import { NEW_CLIENT, GET_CLIENTS_USER } from '@/helpers/queries'
+import { useMutation } from '@apollo/client'
+import { useRouter } from 'next/router'
 
 const NewClient = () => {
   const fieldErrMssg = 'This field is mandatory'
   const emailErrMssg = 'Inavalid emil'
+  const router = useRouter()
+
+  const [newClient] = useMutation(NEW_CLIENT, {
+    update(cache, { data: { newClient }}) {
+      // Get cache object we want to update
+      const { getClientsSeller } = cache.readQuery({ query: GET_CLIENTS_USER })
+
+      // Rewrite cache
+      cache.writeQuery({
+        query: GET_CLIENTS_USER,
+        data: {
+          getClientsSeller: [...getClientsSeller, newClient]
+        }
+      })
+    }
+  });
 
   const formik = useFormik({
     initialValues: {
@@ -21,8 +40,26 @@ const NewClient = () => {
       company: Yup.string().required(fieldErrMssg),
       email: Yup.string().email(emailErrMssg).required(fieldErrMssg)
     }),
-    onSubmit: (values) => {
-      console.log(values)
+
+    onSubmit: async (values) => {
+      const { name, lastName, company, email, phone } = values
+      try {
+        const { data } = await newClient({
+          variables: {
+            input: {
+              name,
+              last_name: lastName,
+              company,
+              email,
+              phone
+            }
+          }
+        })
+        console.log(data.newClient);
+        router.push('/')
+      } catch (error) {
+         console.log(error);
+      }
     }
   })
 
