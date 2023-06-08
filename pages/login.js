@@ -26,7 +26,6 @@ const formik = useFormik({
     password: Yup.string().required(fieldErrMssg)
   }),
   onSubmit: async (values) => {
-    console.log('LOGGING');
     const { email, password } = values
     try {
       const { data } = await authUser({
@@ -37,12 +36,10 @@ const formik = useFormik({
           }
         }
       })
-      console.log('DATA', data)
       setMessage('Loading ...')
 
       // Save toke in local storage
       const { token } = data.authUser
-      console.log('TOKEN', token);
       localStorage.setItem('token', token)
 
       //Redirect to clients screen
@@ -53,7 +50,7 @@ const formik = useFormik({
     } catch (error) {
       const errMssg = error.message.replace('GraphQL error:', '')
       setMessage(errMssg)
-      console.log(error);
+      console.error(error);
 
       setTimeout(() => {
         setMessage(null)

@@ -66,3 +66,30 @@ export const DELETE_CLIENT = gql`
   }
 `;
 
+export const GET_CLIENT = gql`
+  query getClient($id: ID!) {
+    getClient(id: $id) {
+      company
+      email
+      id
+      last_name
+      name
+      phone
+      seller
+    }
+  }
+`;
+
+export const UPDATE_CLIENT = gql`
+  mutation UpdateClient($id: ID!, $input: ClientInput) {
+    updateClient(id: $id, input: $input) {
+      company
+      email
+      id
+      last_name
+      phone
+      name
+      seller
+    }
+  }
+`

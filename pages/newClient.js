@@ -9,6 +9,7 @@ import { useRouter } from 'next/router'
 const NewClient = () => {
   const fieldErrMssg = 'This field is mandatory'
   const emailErrMssg = 'Inavalid emil'
+
   const router = useRouter()
 
   const [message, setMessage] = React.useState(null)
@@ -57,7 +58,6 @@ const NewClient = () => {
             }
           }
         })
-        console.log(data.newClient);
         setMessage(`Client ${data.newClient.name} ${data.newClient.last_name} was succesfully created`)
 
         setTimeout(() => {
@@ -65,7 +65,7 @@ const NewClient = () => {
           router.push('/')
         }, 3000) 
       } catch (error) {
-         console.log(error);
+         console.error(error);
          const errorMssg = error.message.replace('GraphQL error: ', '')
          setMessage(errorMssg)
 

@@ -7,7 +7,6 @@ export default function useUser({
   redirectTo = '',
 }) {
   const { data, loading, client } = useQuery(GET_USER)
-  console.log('Loading', loading)
   
   React.useEffect(() => {
     if(!redirectTo || loading) return
