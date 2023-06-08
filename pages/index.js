@@ -1,10 +1,9 @@
-import * as React from 'react'
+import Client from '@/components/Client'
 import Layout from "@/components/Layout"
-import { useQuery } from "@apollo/client"
 import { GET_CLIENTS_USER } from "@/helpers/queries"
-import { useRouter } from "next/router"
-import Link from 'next/link'
 import useUser from '@/helpers/useUser'
+import { useQuery } from "@apollo/client"
+import Link from 'next/link'
 
 export default function Home() {
   const { data, loading } = useQuery(GET_CLIENTS_USER)
@@ -26,16 +25,13 @@ export default function Home() {
               <th className="w-1/5 py-2">Name</th>
               <th className="w-1/5 py-2">Company</th>
               <th className="w-1/5 py-2">Email</th>
+              <th className="w-1/5 py-2">Actions</th>
             </tr>
           </thead>
 
           <tbody className="bg-white">
             {data?.getClientsSeller?.map((client) => (
-              <tr key={client.id}>
-                <td className="border px-4 py-2 text-gray-700">{client.name} {client.last_name}</td>
-                <td className="border px-4 py-2 text-gray-700">{client.company}</td>
-                <td className="border px-4 py-2 text-gray-700">{client.email}</td>
-              </tr>
+              <Client key={client.id} client={client}/>
             ))}
           </tbody>
         </table>
