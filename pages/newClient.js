@@ -11,6 +11,8 @@ const NewClient = () => {
   const emailErrMssg = 'Inavalid emil'
   const router = useRouter()
 
+  const [message, setMessage] = React.useState(null)
+
   const [newClient] = useMutation(NEW_CLIENT, {
     update(cache, { data: { newClient }}) {
       // Get cache object we want to update
@@ -56,12 +58,31 @@ const NewClient = () => {
           }
         })
         console.log(data.newClient);
-        router.push('/')
+        setMessage(`Client ${data.newClient.name} ${data.newClient.last_name} was succesfully created`)
+
+        setTimeout(() => {
+          setMessage(null)
+          router.push('/')
+        }, 3000) 
       } catch (error) {
          console.log(error);
+         const errorMssg = error.message.replace('GraphQL error: ', '')
+         setMessage(errorMssg)
+
+         setTimeout(() => {
+          setMessage(null)
+         }, 3000)
       }
     }
   })
+
+  const renderMessage = () => {
+    return (
+      <div className="bg-white py-2 px-3 my-3 max-w-sm text-center mx-auto w-full flex justify-center">
+        <p className="text-gray-700">{message}</p>
+      </div>
+    );
+  };
 
   const renderError = (value) => {
     return formik.touched[value] && formik.errors[value] ? (
@@ -75,6 +96,7 @@ const NewClient = () => {
   return (
     <Layout>
       <h1 className="text-2xl text-gray-200 font-light">New Client</h1>
+      {message && renderMessage()}
 
       <div className="flex justify-center mt-5">
         <div className="w-full max-w-lg">
