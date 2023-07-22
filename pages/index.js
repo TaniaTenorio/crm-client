@@ -22,10 +22,10 @@ export default function Home() {
         <table className="table-auto shadow-md mt-10 w-full w-lg">
           <thead className="bg-gray-700">
             <tr className="text-white">
-              <th className="w-1/5 py-2">Name</th>
-              <th className="w-1/5 py-2">Company</th>
-              <th className="w-1/5 py-2">Email</th>
-              <th className="w-1/5 py-2">Actions</th>
+              <th className="w-1/4 py-2">Name</th>
+              <th className="w-1/4 py-2">Company</th>
+              <th className="w-1/4 py-2">Email</th>
+              <th className="w-1/4 py-2">Actions</th>
             </tr>
           </thead>
 

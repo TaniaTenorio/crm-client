@@ -1,30 +1,30 @@
 import * as React from 'react'
-import Swal from "sweetalert2"
-import { DELETE_CLIENT, GET_CLIENTS_USER } from '@/helpers/queries'
-import { useMutation } from '@apollo/client'
+import { DELETE_PRODUCT, GET_PRODUCTS } from '@/helpers/queries'
+import { useMutation, useQuery } from '@apollo/client'
+import Swal from 'sweetalert2'
 import Router from 'next/router'
 
-const Client = ({client}) => {
-  const { name, last_name, company, email, id } = client
+const Product = ({product}) => {
+  const { name, stock, price, id } = product
 
-  const [ deleteClient ] = useMutation(DELETE_CLIENT, {
+  const [deleteProduct] = useMutation(DELETE_PRODUCT, {
     update(cache) {
-      // Get copy of cache
-      const { getClientsSeller } = cache.readQuery({ query: GET_CLIENTS_USER });
+      // Get copy of actual cache
+      const { getProducts } = cache.readQuery({ query: GET_PRODUCTS })
 
       // Rewrite cache
       cache.writeQuery({
-        query: GET_CLIENTS_USER,
+        query: GET_PRODUCTS,
         data: {
-          getClientsSeller: getClientsSeller.filter( prevClient => prevClient.id !== id)
+          getProducts: getProducts.filter( prevProduct => prevProduct.id !== id )
         }
       })
     }
   })
 
-  const handleDelete = (id) => {
+  const handleDelete = () => {
     Swal.fire({
-      title: "Are you sure you want to delete this client?",
+      title: "Are you sure you want to delete this product?",
       text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
@@ -35,49 +35,55 @@ const Client = ({client}) => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const { data } = await deleteClient({
+          const { data } = await deleteProduct({
             variables: {
-              id: id
+              id
             }
           })
-          Swal.fire("Deleted!", data.deleteClient, "success");
+          Swal.fire("Deleted!", data.deleteProduct, "success");
         } catch (error) {
-          console.error(error);
+          console.error(error)
         }
       }
     });
   }
-  
+
   const handleEdit = () => {
     Router.push({
-      pathname: "/editClient/[id]",
-      query: { id }
+      pathname: '/editProduct/[id]',
+      query: {id }
     })
   }
 
   return (
     <tr>
+      <td className="border px-4 py-2 text-gray-700">{name}</td>
+      <td className="border px-4 py-2 text-gray-700">{stock}</td>
+      <td className="border px-4 py-2 text-gray-700">$ {price}</td>
       <td className="border px-4 py-2 text-gray-700">
-        {name} {last_name}
-      </td>
-      <td className="border px-4 py-2 text-gray-700">{company}</td>
-      <td className="border px-4 py-2 text-gray-700">{email}</td>
-      <td className="border px-4 py-2 text-gray-700">
-        <button type="button" className="mr-6" onClick={() => handleDelete(id)}>
+        <button
+          type="button"
+          className="mr-6"
+          onClick={() => handleDelete()}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             fill="red"
-            class="w-6 h-6"
+            className="w-6 h-6"
           >
             <path
-              fill-rule="evenodd"
+              fillRule="evenodd"
               d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z"
-              clip-rule="evenodd"
+              clipRule="evenodd"
             />
           </svg>
         </button>
-        <button type="button" className="mr-6" onClick={() => handleEdit()}>
+        <button
+          type="button"
+          className="mr-6"
+          onClick={() => handleEdit()}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -93,4 +99,4 @@ const Client = ({client}) => {
   );
 }
 
-export default Client
+export default Product

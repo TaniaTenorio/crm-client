@@ -93,3 +93,57 @@ export const UPDATE_CLIENT = gql`
     }
   }
 `
+
+export const GET_PRODUCTS = gql`
+  query getProducts {
+    getProducts {
+      created_at
+      id
+      name
+      price
+      stock
+    }
+  }
+`
+
+export const DELETE_PRODUCT = gql`
+  mutation deleteProduct($id: ID!) {
+    deleteProduct(id: $id)
+  }
+`;
+
+export const NEW_PRODUCT = gql`
+  mutation newProduct($input: ProductInput) {
+    newProduct(input: $input) {
+      created_at
+      name
+      id
+      price
+      stock
+    }
+  }
+`;
+
+export const GET_ONE_PRODUCT = gql`
+  query GetOneProduct($id: ID!) {
+    getOneProduct(id: $id) {
+      created_at
+      id
+      name
+      price
+      stock
+    }
+  }
+`;
+
+export const UPDATE_PRODUCT = gql`
+  mutation UpdateProduct($id: ID!, $input: ProductInput) {
+    updateProduct(id: $id, input: $input) {
+      created_at
+      id
+      name
+      price
+      stock
+    }
+  }
+`;
