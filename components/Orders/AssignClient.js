@@ -3,10 +3,11 @@ import Select from 'react-select'
 import { GET_CLIENTS_USER } from '@/helpers/queries'
 import { useQuery } from '@apollo/client'
 import OrderContext from '@/context/orders/OrderContext'
+import client from '@/config/apollo'
 
 
 const AssignClient = () => {
-  const [clients, setClients] = React.useState([]);
+  const [client, setClient] = React.useState([]);
 
   // Order Context
   const orderContext = React.useContext(OrderContext)
@@ -15,18 +16,16 @@ const AssignClient = () => {
   const { data, loading, error } = useQuery(GET_CLIENTS_USER)
 
   React.useEffect(() => {
-    if(data && !error) {
-      const { getClientsSeller } = data;
-      setClients(getClientsSeller);
-    }
-  }, [data, error]);
-
-  const selectClient = (client) => {
     addClient(client);
+  }, [client]);
+  
+  const selectClient = (client) => {
+    setClient(client);
   };
-
+  
   if(loading) return null
-
+  
+  const { getClientsSeller } = data;
   
 
   return (
@@ -36,7 +35,7 @@ const AssignClient = () => {
       </p>
       <Select
         className="my-2"
-        options={clients}
+        options={getClientsSeller}
         onChange={(val) => selectClient(val)}
         getOptionLabel={(clients) => clients.name}
         getOptionValue={(clients) => clients.id}
