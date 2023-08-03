@@ -146,4 +146,21 @@ export const UPDATE_PRODUCT = gql`
       stock
     }
   }
-`;
+`
+
+export const NEW_ORDER = gql`
+  mutation NewOrder($input: OrderInput) {
+    newOrder(input: $input) {
+      client
+      date
+      id
+      order {
+        amount
+        id
+      }
+      seller
+      status
+      total
+    }
+  }
+`
