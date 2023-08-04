@@ -8,11 +8,12 @@ import Order from "@/components/Order"
 const Orders = () => {
 
   const { data, loading, error } = useQuery(GET_ORDERS_SELLER)
-  console.log('orders_data', data, loading, error);
 
   if(loading) return 'Loading ...'
 
   const { getOrderSeller } = data
+
+  console.log('orders_data', data);
 
   return (
     <div>

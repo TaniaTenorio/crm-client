@@ -1,21 +1,96 @@
 import * as React from 'react'
+import { useMutation } from '@apollo/client'
+import { DELETE_ORDER, UPDATE_ORDER, GET_ORDERS_SELLER } from '@/helpers/queries'
+import Swal from 'sweetalert2'
 
 const Order = ({ order }) => {
   const { id: orderId, total, client, status } = order
   const { name, last_name: lastName, email, phone, id: clientId } = client
 
-  // console.log('cliente', client);
+  const [ UpdateOrder ] = useMutation(UPDATE_ORDER)
+  const [ DeleteOrder ] = useMutation(DELETE_ORDER, {
+    update(cache) {
+      // Get copy of cache
+      const { getOrderSeller } = cache.readQuery({ query: GET_ORDERS_SELLER })
+
+      // Rewrite cache
+      cache.writeQuery({
+        query: GET_ORDERS_SELLER,
+        data: {
+          getOrderSeller: getOrderSeller.filter( prevOrder => prevOrder.id !== orderId)
+        }
+      })
+    }
+  })
 
   const [orderStatus, setOrderStatus ] = React.useState(status)
+  const [ classString, setClassString ] = React.useState('')
+
+  // Func to modify order color according to it's state
+  const createClass = () => {
+    if(orderStatus === 'PENDING') {
+      setClassString('border-yellow-500')
+    } else if (orderStatus === 'COMPLETED'){
+      setClassString("border-green-500")
+    } else {
+      setClassString("border-red-500")
+    }
+  }
 
   React.useEffect(() => {
     if (orderStatus) {
       setOrderStatus(orderStatus);
     }
+    createClass()
   }, [orderStatus]);
 
+  const changeOrderState = async (newStatus) => {
+    try {
+      const { data } = await UpdateOrder({
+        variables:{
+          id: orderId,
+          input: {
+            client: clientId,
+            status: newStatus, 
+          }
+        } 
+      })
+      setOrderStatus(data.updateOrder.status)
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const handleDelete = () => {
+    console.log('deleting');
+    Swal.fire({
+      title: "Are you sure you want to delete this order?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "No, cancel",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const { data } = await DeleteOrder({
+            variables: {
+              id: orderId
+            },
+          });
+          Swal.fire("Deleted!", data.deleteOrder, "success")
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    });
+  };
+
+
   return (
-    <div className="mt-4 bg-gray-300 rounded p-6 md:grid md:grid-cols-2 md:gap-4">
+    <div className={`${classString} border-t-4 mt-4 bg-gray-300 rounded p-6 md:grid md:grid-cols-2 md:gap-4`}>
       <div>
         <p className="font-bold text-gray-700">
           Client: {name} {lastName}
@@ -64,6 +139,7 @@ const Order = ({ order }) => {
         <select
           className="mt-2 appearance-none bg-blue-700 border border-blue-700 text-white p-2 text-center rounded leading-tight focus:outline-none focus:bg-blue-800 focus:border-blue-800 uppercase text-xs font-bold"
           value={orderStatus}
+          onChange={(e) => changeOrderState(e.target.value)}
         >
           <option value="COMPLETED">COMPLETED</option>
           <option value="PENDING">PENDING</option>
@@ -85,7 +161,7 @@ const Order = ({ order }) => {
           <span className="font-light"> ${total}</span>
         </p>
 
-        <button className="flex items-center mt-4 bg-red-800 px-5 py-2 inline-block text-white leading-tight uppercase text-xs font-bold">
+        <button className="flex items-center mt-4 bg-red-800 px-5 py-2 inline-block text-white leading-tight uppercase text-xs font-bold" onClick={() => handleDelete()}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"

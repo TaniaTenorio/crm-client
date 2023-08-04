@@ -5,7 +5,7 @@ import AssingProducts from '@/components/Orders/AssingProducts'
 import OrderContext from '@/context/orders/OrderContext'
 import OrderSummary from '@/components/Orders/OrderSummary'
 import Total from '@/components/Orders/Total'
-import { NEW_ORDER } from '@/helpers/queries'
+import { NEW_ORDER, GET_ORDERS_SELLER } from '@/helpers/queries'
 import { useMutation  } from '@apollo/client'
 import { useRouter } from 'next/router'
 import Swal from 'sweetalert2'
@@ -18,7 +18,23 @@ const NewOrder = () => {
   const orderContext = React.useContext(OrderContext)
   const { client, products, total } = orderContext
 
-  const [ NewOrder ] = useMutation(NEW_ORDER)
+  // console.log('client', client);
+console.log('products', products);
+
+  const [ NewOrder ] = useMutation(NEW_ORDER, {
+    update(cache, { data: { NewOrder }}){
+      // Get cache
+      const { getOrderSeller } = cache.readQuery({ query: GET_ORDERS_SELLER })
+
+      // Rewrite cache
+      cache.writeQuery({
+        query: GET_ORDERS_SELLER,
+        data: {
+          getOrderSeller: {...getOrderSeller, NewOrder}
+        }
+      })
+    }
+  })
 
   const validateOrder = () => {
      return !products.every((el) => el.amount > 0) || total === 0 || client.length === 0 ? ' opacity-50 cursor-not-allowed ': ''
@@ -26,8 +42,10 @@ const NewOrder = () => {
 
   const createNewOrder = async () => {
     const { id } = client;
-    // Remove extra dara from products
+    // Remove extra data from products
     const order = products.map(({ __typename, stock, created_at, ...product }) => product)
+
+    console.log('order', order);
     try {
       const { data } =  await NewOrder({
         variables: {

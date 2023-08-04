@@ -151,7 +151,9 @@ export const UPDATE_PRODUCT = gql`
 export const NEW_ORDER = gql`
   mutation NewOrder($input: OrderInput) {
     newOrder(input: $input) {
-      client
+      client {
+        name
+      }
       date
       id
       order {
@@ -189,3 +191,27 @@ export const GET_ORDERS_SELLER = gql`
     }
   }
 `
+
+export const UPDATE_ORDER = gql`
+  mutation UpdateOrder($id: ID!, $input: OrderInput) {
+    updateOrder(id: $id, input: $input) {
+      date
+      id
+      order {
+        amount
+        id
+        name
+        price
+      }
+      seller
+      status
+      total
+    }
+  }
+`
+
+export const DELETE_ORDER = gql`
+  mutation DeleteOrder($id: ID!) {
+    deleteOrder(id: $id)
+  }
+`;
