@@ -164,3 +164,28 @@ export const NEW_ORDER = gql`
     }
   }
 `
+
+export const GET_ORDERS_SELLER = gql`
+  query GetOrderSeller {
+    getOrderSeller {
+      client {
+        id
+        name
+        last_name
+        email
+        phone
+      }
+      date
+      id
+      order {
+        amount
+        id
+        name
+        price
+      }
+      seller
+      status
+      total
+    }
+  }
+`
