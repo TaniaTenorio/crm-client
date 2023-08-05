@@ -10,6 +10,7 @@ import {
   Tooltip,
   XAxis,
   YAxis,
+  ResponsiveContainer
 } from "recharts"
 
 const BestSellers = () => {
@@ -42,25 +43,28 @@ const BestSellers = () => {
   return (
     <Layout>
       <h1 className="text-2xl text-gray-200 font-light">Best Sellers</h1>
-      <BarChart
-        className="mt-10"
-        width={600}
-        height={500}
-        data={sellerForGraph}
-        margin={{
-          top: 5,
-          right: 30,
-          left: 20,
-          bottom: 5,
-        }}
-      >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
-        <YAxis />
-        <Tooltip />
-        <Legend />
-        <Bar dataKey="total" fill="#3182CE" />
-      </BarChart>
+      <ResponsiveContainer width={'95%'} height={550}>
+        <BarChart
+          className="mt-10"
+          width={600}
+          height={500}
+          data={sellerForGraph}
+          margin={{
+            top: 5,
+            right: 30,
+            left: 20,
+            bottom: 5,
+          }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="name" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Bar dataKey="total" fill="#3182CE" />
+        </BarChart>
+
+      </ResponsiveContainer>
     </Layout>
   );
 }
