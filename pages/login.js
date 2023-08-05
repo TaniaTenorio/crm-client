@@ -39,8 +39,10 @@ const formik = useFormik({
       setMessage('Loading ...')
 
       // Save toke in local storage
-      const { token } = data.authUser
-      localStorage.setItem('token', token)
+      setTimeout(() => {
+        const { token } = data.authUser
+        localStorage.setItem('token', token)
+      }, 1000)
 
       //Redirect to clients screen
       setTimeout(() => {
