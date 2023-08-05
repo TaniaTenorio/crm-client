@@ -18,9 +18,6 @@ const NewOrder = () => {
   const orderContext = React.useContext(OrderContext)
   const { client, products, total } = orderContext
 
-  // console.log('client', client);
-console.log('products', products);
-
   const [ NewOrder ] = useMutation(NEW_ORDER, {
     update(cache, { data: { NewOrder }}){
       // Get cache

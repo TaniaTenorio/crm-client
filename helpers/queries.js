@@ -228,3 +228,16 @@ export const GET_BEST_SELLERS = gql`
     }
   }
 `
+
+export const GET_BEST_CLIENTS = gql`
+  query GetBestClients {
+    bestClients {
+      client {
+        email
+        last_name
+        name
+      }
+      total
+    }
+  }
+`;
