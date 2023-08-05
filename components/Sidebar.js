@@ -48,11 +48,42 @@ const Sidebar = () => {
             </Link>
           </li>
         </nav>
+
+        <div className="sm:mt-10">
+          <p className="text-2xl font-bold">Other Options</p>
+          <nav className="mt-5 list-none">
+            <li
+              className={
+                router.pathname === "/BestSellers" ? "bg-blue-800 p-2" : "p-2"
+              }
+            >
+              <Link href="/BestSellers" className="block">
+                Best Sellers
+              </Link>
+            </li>
+            <li
+              className={
+                router.pathname === "/BestClients" ? "bg-blue-800 p-2" : "p-2"
+              }
+            >
+              <Link href="/BestClients" className="block">
+                Best Clients
+              </Link>
+            </li>
+          </nav>
+        </div>
+
       </div>
 
       <div>
         <p className="mb-6">{data?.getUser?.email}</p>
-        <button className="bg-blue-800 w-full sm:w-auto font-bold uppercase text-xs rounded py-1 px-2 shadow-md" type="button" onClick={() => logout()}>Logout</button>
+        <button
+          className="bg-blue-800 w-full sm:w-auto font-bold uppercase text-xs rounded py-1 px-2 shadow-md"
+          type="button"
+          onClick={() => logout()}
+        >
+          Logout
+        </button>
       </div>
     </aside>
   );
