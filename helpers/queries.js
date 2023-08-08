@@ -21,8 +21,8 @@ export const CREATE_USER = gql`
 `
 
 export const GET_CLIENTS_USER = gql`
-  query getClientsSeller {
-    getClientsSeller {
+  query getClientsSeller($limit: Int, $offset: Int) {
+    getClientsSeller(limit: $limit, offset: $offset) {
       company
       email
       id
@@ -240,4 +240,10 @@ export const GET_BEST_CLIENTS = gql`
       total
     }
   }
+`
+
+export const GET_TOTAL_CLIENTS = gql`
+    query getTotalClients{
+      getTotalClients
+    }
 `;

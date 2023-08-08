@@ -1,16 +1,47 @@
 import Client from '@/components/Client'
 import Layout from "@/components/Layout"
 import { GET_CLIENTS_USER } from "@/helpers/queries"
+import { GET_TOTAL_CLIENTS } from '@/helpers/queries'
 import useUser from '@/helpers/useUser'
 import { useQuery } from "@apollo/client"
 import Link from 'next/link'
+import * as React from 'react'
+import Paginator from '@/components/Paginator'
 
 export default function Home() {
-  const { data, loading } = useQuery(GET_CLIENTS_USER)
+  const [ pagination, setPagination ] = React.useState({
+    limit: 2,
+    offset: 0,
+    actual: 1
+  })
+
+  const { data, loading } = useQuery(GET_CLIENTS_USER, {
+    variables: {
+      limit: pagination.limit,
+      offset: pagination.offset
+    }
+  })
+  const { data: totalClients, loading: loadingTotal } = useQuery(GET_TOTAL_CLIENTS);
   const { user, loading: userLoading } = useUser({redirectTo: '/login'})
 
-  if (userLoading || !user) {
+  if (userLoading || loading || loadingTotal || !user) {
     return null;
+  }
+
+  const handlePrevButton = () => {
+    setPagination({
+      ...pagination,
+      offset: pagination.offset - pagination.limit,
+      actual: pagination.actual - 1
+    })
+  }
+
+  const handleNextButton = () => {
+    setPagination({
+      ...pagination,
+      offset: pagination.offset + pagination.limit,
+      actual: pagination.actual + 1
+    })
   }
 
   return (
@@ -36,6 +67,14 @@ export default function Home() {
               ))}
             </tbody>
           </table>
+
+          <Paginator 
+            actualPage={pagination.actual}
+            totalClients={totalClients.getTotalClients}
+            limit={pagination.limit}
+            handleNextButton={handleNextButton}
+            handlePrevButton={handlePrevButton}
+          />
 
         </div>
       </Layout>
