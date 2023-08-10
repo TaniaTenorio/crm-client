@@ -2,7 +2,8 @@ import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client"
 import { setContext } from "@apollo/client/link/context"
 
 const httpLink = createHttpLink({
-  uri: "https://crmgraphql-u2at.onrender.com",
+  // uri: "https://crmgraphql-u2at.onrender.com",
+  uri: process.env.NEXT_PUBLIC_CRM_URL,
 });
 
 const authLink = setContext((_, { headers }) => {
