@@ -12,7 +12,7 @@ const Sidebar = () => {
   if(loading && !data?.getUser) {
     return null
   }
-
+  
   const logout = () => {
      localStorage.removeItem('token')
      client.clearStore();
@@ -73,6 +73,34 @@ const Sidebar = () => {
           </nav>
         </div>
 
+        {data?.getUser?.rol === "ADMIN" ? (
+          <div className="sm:mt-10">
+            <p className="text-2xl font-bold">Manage Users</p>
+            <nav className="mt-5 list-none">
+              <li
+                className={
+                  router.pathname === "/createaccount"
+                    ? "bg-blue-800 p-2"
+                    : "p-2"
+                }
+              >
+                <Link href="/createaccount" className="block">
+                  Create User
+                </Link>
+              </li>
+              {/* TO DO: create page for users management */}
+              {/* <li
+              className={
+                router.pathname === "/Users" ? "bg-blue-800 p-2" : "p-2"
+              }
+            >
+              <Link href="/Users" className="block">
+                Users
+              </Link>
+            </li> */}
+            </nav>
+          </div>
+        ) : null}
       </div>
 
       <div>
