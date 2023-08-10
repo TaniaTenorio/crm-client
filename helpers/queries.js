@@ -16,6 +16,7 @@ export const CREATE_USER = gql`
       id
       last_name
       name
+      rol
     }
   }
 `
@@ -42,6 +43,7 @@ export const GET_USER = gql`
       id
       last_name
       name
+      rol
     }
   }
 `;

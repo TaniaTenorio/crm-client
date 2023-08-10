@@ -26,15 +26,17 @@ const NewAccount = () => {
       lastName: "",
       email: "",
       password: "",
+      rol: "",
     },
     validationSchema: Yup.object({
       name: Yup.string().required(fieldErrorMsg),
       lastName: Yup.string().required(fieldErrorMsg),
       email: Yup.string().email(emailErrMsd).required(fieldErrorMsg),
-      password: Yup.string().required(fieldErrorMsg).min(6, passwordErrMsg)
+      password: Yup.string().required(fieldErrorMsg).min(6, passwordErrMsg),
+      rol: Yup.string().required(fieldErrorMsg)
     }),
     onSubmit: async (values) => {
-      const {name, lastName, email, password} = values
+      const {name, lastName, email, password, rol} = values
       try {
         const { data } = await newUser({
           variables: {
@@ -42,7 +44,8 @@ const NewAccount = () => {
               name,
               last_name: lastName,
               email,
-              password 
+              password,
+              rol
             }
           }
         })
@@ -92,7 +95,10 @@ const NewAccount = () => {
   return (
     <>
       <Layout>
-      {message && renderMessage()}
+        {message && renderMessage()}
+        <div className="text-center mb-10">
+          <hi className="text-xl">Register New User</hi>
+        </div>
         <div className="flex justify-center mt-5">
           <div className="w-full max-w-sm">
             <form
@@ -172,6 +178,28 @@ const NewAccount = () => {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
+              </div>
+              {renderError("password")}
+
+              <div className="mb-4">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="rol"
+                >
+                  Rol
+                </label>
+                <select
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="rol"
+                  type="select"
+                  value={formik.values.rol}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                >
+                  <option>Select a rol</option>
+                  <option value="ADMIN">Admin</option>
+                  <option value="SELLER">Seller</option>
+                </select>
               </div>
               {renderError("password")}
 
