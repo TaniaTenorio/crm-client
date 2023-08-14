@@ -21,6 +21,46 @@ export const CREATE_USER = gql`
   }
 `
 
+export const GET_ONE_USER = gql`
+  query GetOneUser($id: ID!) {
+    getOneUser(id: $id) {
+      name
+      last_name
+      id
+      email
+      rol
+    }
+  }
+`;
+
+export const GET_USERS = gql`
+  query GetUsers {
+    getUsers {
+      name
+      last_name
+      email
+      id
+      rol
+    }
+  }
+`
+
+export const UPDATE_USER = gql`
+  mutation UpdateUser($id: ID!, $input: UserInput!) {
+    updateUser(id: $id, input: $input) {
+      id
+      name
+      rol
+    }
+  }
+`;
+
+export const DELETE_USER = gql`
+  mutation DeleteUser($id: ID!) {
+    deleteUser(id: $id)
+  }
+`;
+
 export const GET_CLIENTS_USER = gql`
   query getClientsSeller($limit: Int, $offset: Int) {
     getClientsSeller(limit: $limit, offset: $offset) {

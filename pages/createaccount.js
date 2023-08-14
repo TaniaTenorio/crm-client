@@ -4,12 +4,15 @@ import { useFormik } from "formik"
 import * as Yup from 'yup'
 import { useMutation } from "@apollo/client"
 import { useRouter } from "next/router"
-import { CREATE_USER } from "@/helpers/queries"
+import { CREATE_USER, GET_USERS } from "@/helpers/queries"
+import useUser from "@/helpers/useUser"
 
 const NewAccount = () => {
   const fieldErrorMsg = "This field is mandatory"
   const emailErrMsd = 'Invalid Email'
   const passwordErrMsg = 'Password must have at least 6 characters'
+
+  const { user, loading: userLoading } = useUser({ redirectTo: "/login" });
 
   const router = useRouter()
 
@@ -17,7 +20,18 @@ const NewAccount = () => {
 
   // Create user
 
-  const [newUser] = useMutation(CREATE_USER)
+  const [newUser] = useMutation(CREATE_USER, {
+    update(cache, { data: {newUser} }) {
+      const { getUsers } = cache.readQuery({ query: GET_USERS })
+
+      cache.writeQuery({
+        query: GET_USERS,
+        data: {
+          getUsers: [...getUsers, newUser]
+        }
+      })
+    }
+  })
 
   // Form validation
   const formik = useFormik({
@@ -54,7 +68,7 @@ const NewAccount = () => {
 
         setTimeout(() => {
           setMessage(null)
-          router.push("/login")
+          router.push("/users")
         }, 3000);
       
 
@@ -97,7 +111,7 @@ const NewAccount = () => {
       <Layout>
         {message && renderMessage()}
         <div className="text-center mb-10">
-          <hi className="text-xl">Register New User</hi>
+          <h1 className="text-xl">Register New User</h1>
         </div>
         <div className="flex justify-center mt-5">
           <div className="w-full max-w-sm">

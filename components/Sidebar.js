@@ -12,7 +12,7 @@ const Sidebar = () => {
   if(loading && !data?.getUser) {
     return null
   }
-  
+
   const logout = () => {
      localStorage.removeItem('token')
      client.clearStore();
@@ -79,6 +79,15 @@ const Sidebar = () => {
             <nav className="mt-5 list-none">
               <li
                 className={
+                  router.pathname === "/users" ? "bg-blue-800 p-2" : "p-2"
+                }
+              >
+                <Link href="/users" className="block">
+                  Users
+                </Link>
+              </li>
+              <li
+                className={
                   router.pathname === "/createaccount"
                     ? "bg-blue-800 p-2"
                     : "p-2"
@@ -88,16 +97,6 @@ const Sidebar = () => {
                   Create User
                 </Link>
               </li>
-              {/* TO DO: create page for users management */}
-              {/* <li
-              className={
-                router.pathname === "/Users" ? "bg-blue-800 p-2" : "p-2"
-              }
-            >
-              <Link href="/Users" className="block">
-                Users
-              </Link>
-            </li> */}
             </nav>
           </div>
         ) : null}
