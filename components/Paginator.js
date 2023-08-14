@@ -15,7 +15,6 @@ const Paginator = ({ actualPage, totalClients, limit, handlePrevButton, handleNe
     ) : (
       ""
     )
-  console.log('PAGES', pages);
 
   return ( 
     <div className='mt-5 flex justify-center'>

@@ -47,6 +47,7 @@ const formik = useFormik({
       //Redirect to clients screen
       setTimeout(() => {
         setMessage(null)
+        console.log('redirecting...');
         router.push('/')
       }, 2000)
     } catch (error) {
