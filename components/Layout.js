@@ -20,7 +20,7 @@ const Layout = ({ children }) => {
       </Head>
 
       <div className="min-h-screen">
-        {router.pathname === "/login" || router.pathname === "/createaccount" ? (
+        {router.pathname === "/login" ? (
           <div className="min-h-screen flex flex-col justify-center">
             {children}
           </div>
