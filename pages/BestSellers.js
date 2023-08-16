@@ -10,11 +10,12 @@ import {
   Tooltip,
   XAxis,
   YAxis,
-  ResponsiveContainer
-} from "recharts"
+  ResponsiveContainer,
+} from 'recharts'
 
 const BestSellers = () => {
-  const { data, loading, error, startPolling, stopPolling } = useQuery(GET_BEST_SELLERS)
+  const { data, loading, error, startPolling, stopPolling } =
+    useQuery(GET_BEST_SELLERS)
 
   React.useEffect(() => {
     // Refetch data after 1 sec to update bar chart
@@ -22,11 +23,11 @@ const BestSellers = () => {
     return () => {
       stopPolling()
     }
-  }, []) 
+  }, [])
 
-  if(loading) return 'Loading ...'
+  if (loading) return 'Loading ...'
 
-  console.log(data);
+  console.log(data)
 
   const { bestSellers } = data
 
@@ -36,16 +37,16 @@ const BestSellers = () => {
   bestSellers.map((seller, index) => {
     sellerForGraph[index] = {
       ...seller.seller[0],
-      total: seller.total
+      total: seller.total,
     }
   })
 
   return (
     <Layout>
-      <h1 className="text-2xl text-gray-200 font-light">Best Sellers</h1>
+      <h1 className='text-2xl text-gray-200 font-light'>Best Sellers</h1>
       <ResponsiveContainer width={'95%'} height={550}>
         <BarChart
-          className="mt-10"
+          className='mt-10'
           width={600}
           height={500}
           data={sellerForGraph}
@@ -56,17 +57,16 @@ const BestSellers = () => {
             bottom: 5,
           }}
         >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
+          <CartesianGrid strokeDasharray='3 3' />
+          <XAxis dataKey='name' />
           <YAxis />
           <Tooltip />
           <Legend />
-          <Bar dataKey="total" fill="#3182CE" />
+          <Bar dataKey='total' fill='#3182CE' />
         </BarChart>
-
       </ResponsiveContainer>
     </Layout>
-  );
+  )
 }
- 
-export default BestSellers;
+
+export default BestSellers

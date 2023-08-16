@@ -15,7 +15,7 @@ const NewClient = () => {
   const [message, setMessage] = React.useState(null)
 
   const [newClient] = useMutation(NEW_CLIENT, {
-    update(cache, { data: { newClient }}) {
+    update(cache, { data: { newClient } }) {
       // Get cache object we want to update
       const { getClientsSeller } = cache.readQuery({ query: GET_CLIENTS_USER })
 
@@ -23,11 +23,11 @@ const NewClient = () => {
       cache.writeQuery({
         query: GET_CLIENTS_USER,
         data: {
-          getClientsSeller: [...getClientsSeller, newClient]
-        }
+          getClientsSeller: [...getClientsSeller, newClient],
+        },
       })
-    }
-  });
+    },
+  })
 
   const formik = useFormik({
     initialValues: {
@@ -41,7 +41,7 @@ const NewClient = () => {
       name: Yup.string().required(fieldErrMssg),
       lastName: Yup.string().required(fieldErrMssg),
       company: Yup.string().required(fieldErrMssg),
-      email: Yup.string().email(emailErrMssg).required(fieldErrMssg)
+      email: Yup.string().email(emailErrMssg).required(fieldErrMssg),
     }),
 
     onSubmit: async (values) => {
@@ -54,40 +54,42 @@ const NewClient = () => {
               last_name: lastName,
               company,
               email,
-              phone
-            }
-          }
+              phone,
+            },
+          },
         })
-        setMessage(`Client ${data.newClient.name} ${data.newClient.last_name} was succesfully created`)
+        setMessage(
+          `Client ${data.newClient.name} ${data.newClient.last_name} was succesfully created`
+        )
 
         setTimeout(() => {
           setMessage(null)
           router.push('/')
-        }, 3000) 
+        }, 3000)
       } catch (error) {
-         console.error(error);
-         const errorMssg = error.message.replace('GraphQL error: ', '')
-         setMessage(errorMssg)
+        console.error(error)
+        const errorMssg = error.message.replace('GraphQL error: ', '')
+        setMessage(errorMssg)
 
-         setTimeout(() => {
+        setTimeout(() => {
           setMessage(null)
-         }, 3000)
+        }, 3000)
       }
-    }
+    },
   })
 
   const renderMessage = () => {
     return (
-      <div className="bg-white py-2 px-3 my-3 max-w-sm text-center mx-auto w-full flex justify-center">
-        <p className="text-gray-700">{message}</p>
+      <div className='bg-white py-2 px-3 my-3 max-w-sm text-center mx-auto w-full flex justify-center'>
+        <p className='text-gray-700'>{message}</p>
       </div>
-    );
-  };
+    )
+  }
 
   const renderError = (value) => {
     return formik.touched[value] && formik.errors[value] ? (
-      <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
-        <p className="font-bold">Error</p>
+      <div className='my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4'>
+        <p className='font-bold'>Error</p>
         <p>{formik.errors[value]}</p>
       </div>
     ) : null
@@ -95,100 +97,103 @@ const NewClient = () => {
 
   return (
     <Layout>
-      <h1 className="text-2xl text-gray-200 font-light">New Client</h1>
+      <h1 className='text-2xl text-gray-200 font-light'>New Client</h1>
       {message && renderMessage()}
 
-      <div className="flex justify-center mt-5">
-        <div className="w-full max-w-lg">
-          <form className="bg-white shadow-md px-8 pt-6 pb-8 mb-4" onSubmit={formik.handleSubmit}>
-            <div className="mb-4">
+      <div className='flex justify-center mt-5'>
+        <div className='w-full max-w-lg'>
+          <form
+            className='bg-white shadow-md px-8 pt-6 pb-8 mb-4'
+            onSubmit={formik.handleSubmit}
+          >
+            <div className='mb-4'>
               <label
-                className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="name"
+                className='block text-gray-700 text-sm font-bold mb-2'
+                htmlFor='name'
               >
                 Name
               </label>
               <input
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="name"
-                type="text"
-                placeholder="Client Name"
+                className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+                id='name'
+                type='text'
+                placeholder='Client Name'
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.name}
               />
             </div>
-            {renderError("name")}
+            {renderError('name')}
 
-            <div className="mb-4">
+            <div className='mb-4'>
               <label
-                className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="lastName"
+                className='block text-gray-700 text-sm font-bold mb-2'
+                htmlFor='lastName'
               >
                 Last Name
               </label>
               <input
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="lastName"
-                type="text"
-                placeholder="Client Last Name"
+                className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+                id='lastName'
+                type='text'
+                placeholder='Client Last Name'
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.lastName}
               />
             </div>
-            {renderError("lastName")}
+            {renderError('lastName')}
 
-            <div className="mb-4">
+            <div className='mb-4'>
               <label
-                className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="company"
+                className='block text-gray-700 text-sm font-bold mb-2'
+                htmlFor='company'
               >
                 Company
               </label>
               <input
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="company"
-                type="text"
-                placeholder="Client Company"
+                className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+                id='company'
+                type='text'
+                placeholder='Client Company'
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.company}
               />
             </div>
-            {renderError("company")}
+            {renderError('company')}
 
-            <div className="mb-4">
+            <div className='mb-4'>
               <label
-                className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="email"
+                className='block text-gray-700 text-sm font-bold mb-2'
+                htmlFor='email'
               >
                 Email
               </label>
               <input
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="email"
-                type="text"
-                placeholder="Client Email"
+                className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+                id='email'
+                type='text'
+                placeholder='Client Email'
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.email}
               />
             </div>
-            {renderError("email")}
+            {renderError('email')}
 
-            <div className="mb-4">
+            <div className='mb-4'>
               <label
-                className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="phone"
+                className='block text-gray-700 text-sm font-bold mb-2'
+                htmlFor='phone'
               >
                 Phone Number
               </label>
               <input
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="phone"
-                type="tel"
-                placeholder="Client Phone Number"
+                className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+                id='phone'
+                type='tel'
+                placeholder='Client Phone Number'
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 value={formik.values.phone}
@@ -196,15 +201,15 @@ const NewClient = () => {
             </div>
 
             <input
-              type="submit"
-              className="bg-gray-800 w-full mt-5 p-2 uppercase font-bold hover:bg-gray-900"
-              value="Register Client"
+              type='submit'
+              className='bg-gray-800 w-full mt-5 p-2 uppercase font-bold hover:bg-gray-900'
+              value='Register Client'
             />
           </form>
         </div>
       </div>
     </Layout>
-  );
+  )
 }
 
 export default NewClient

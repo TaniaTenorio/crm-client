@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client"
+import { gql } from '@apollo/client'
 
 export const AUTH_USER = gql`
   mutation authUser($input: AuthInput!) {
@@ -31,7 +31,7 @@ export const GET_ONE_USER = gql`
       rol
     }
   }
-`;
+`
 
 export const GET_USERS = gql`
   query GetUsers {
@@ -53,13 +53,13 @@ export const UPDATE_USER = gql`
       rol
     }
   }
-`;
+`
 
 export const DELETE_USER = gql`
   mutation DeleteUser($id: ID!) {
     deleteUser(id: $id)
   }
-`;
+`
 
 export const GET_CLIENTS_USER = gql`
   query getClientsSeller($limit: Int, $offset: Int) {
@@ -86,7 +86,7 @@ export const GET_USER = gql`
       rol
     }
   }
-`;
+`
 
 export const NEW_CLIENT = gql`
   mutation newClient($input: ClientInput) {
@@ -100,13 +100,13 @@ export const NEW_CLIENT = gql`
       seller
     }
   }
-`;
+`
 
 export const DELETE_CLIENT = gql`
   mutation deleteClient($id: ID!) {
     deleteClient(id: $id)
   }
-`;
+`
 
 export const GET_CLIENT = gql`
   query getClient($id: ID!) {
@@ -120,7 +120,7 @@ export const GET_CLIENT = gql`
       seller
     }
   }
-`;
+`
 
 export const UPDATE_CLIENT = gql`
   mutation UpdateClient($id: ID!, $input: ClientInput) {
@@ -152,7 +152,7 @@ export const DELETE_PRODUCT = gql`
   mutation deleteProduct($id: ID!) {
     deleteProduct(id: $id)
   }
-`;
+`
 
 export const NEW_PRODUCT = gql`
   mutation newProduct($input: ProductInput) {
@@ -164,7 +164,7 @@ export const NEW_PRODUCT = gql`
       stock
     }
   }
-`;
+`
 
 export const GET_ONE_PRODUCT = gql`
   query GetOneProduct($id: ID!) {
@@ -176,7 +176,7 @@ export const GET_ONE_PRODUCT = gql`
       stock
     }
   }
-`;
+`
 
 export const UPDATE_PRODUCT = gql`
   mutation UpdateProduct($id: ID!, $input: ProductInput) {
@@ -256,7 +256,7 @@ export const DELETE_ORDER = gql`
   mutation DeleteOrder($id: ID!) {
     deleteOrder(id: $id)
   }
-` 
+`
 
 export const GET_BEST_SELLERS = gql`
   query GetBestSellers {
@@ -285,7 +285,7 @@ export const GET_BEST_CLIENTS = gql`
 `
 
 export const GET_TOTAL_CLIENTS = gql`
-    query getTotalClients{
-      getTotalClients
-    }
-`;
+  query getTotalClients {
+    getTotalClients
+  }
+`

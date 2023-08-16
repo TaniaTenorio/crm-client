@@ -14,22 +14,22 @@ const AssingProducts = () => {
   React.useEffect(() => {
     addProduct(products)
   }, [products])
-  
+
   const selectProduct = (product) => {
     setProducts(product)
   }
-  
-  if(loading) return null
-  
+
+  if (loading) return null
+
   const { getProducts } = data
 
   return (
     <>
-      <p className="mt-10 border-l-4 border-gray-800 text-gray-200 p-2 text-sm font-bold">
+      <p className='mt-10 border-l-4 border-gray-800 text-gray-200 p-2 text-sm font-bold'>
         2. Search and select the products
       </p>
       <Select
-        className="my-2"
+        className='my-2'
         isMulti
         options={getProducts}
         onChange={(val) => selectProduct(val)}
@@ -37,16 +37,16 @@ const AssingProducts = () => {
           `${products.name} - ${products.stock} units`
         }
         getOptionValue={(products) => products.id}
-        placeholder="Options ..."
+        placeholder='Options ...'
         styles={{
           menu: () => ({
-            color: "grey",
-            backgroundColor: "white",
+            color: 'grey',
+            backgroundColor: 'white',
           }),
         }}
       />
     </>
-  );
+  )
 }
 
 export default AssingProducts
